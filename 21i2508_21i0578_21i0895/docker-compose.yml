@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  master:
+    build: .
+    container_name: mpi-master
+    networks:
+      mpi-network:
+        ipv4_address: 172.16.238.10
+    volumes:
+      - .:/workspace
+    ports:
+      - "2222:22"
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+
+  slave:
+    build: .
+    container_name: mpi-slave
+    networks:
+      mpi-network:
+        ipv4_address: 172.16.238.11
+    volumes:
+      - .:/workspace
+    ports:
+      - "2223:22"
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+
+networks:
+  mpi-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.238.0/24
